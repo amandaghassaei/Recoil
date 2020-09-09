@@ -1,0 +1,79 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @emails oncall+perf_viz
+ * @flow strict-local
+ * @format
+ */
+'use strict';
+
+import type { RecoilValue } from '../core/Recoil_RecoilValue';
+import type { NodeKey, Store, StoreRef, StoreState, TreeState } from '../core/Recoil_State';
+
+const React = require('React');
+
+const {
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} = require('React');
+
+const {
+  fireNodeSubscriptions,
+  setNodeValue,
+  setUnvalidatedAtomValue
+} = require('../core/Recoil_FunctionalCore');
+
+const nullthrows = require('../util/Recoil_nullthrows');
+
+const Queue = require('../adt/Recoil_Queue');
+
+type Props = {
+  initializeState?: ({
+    set: <T>(RecoilValue<T>, T) => void,
+    setUnvalidatedAtomValues: (Map<string, mixed>) => void,
+  }) => void,
+  children: React.Node,
+};
+declare function notInAContext(): any;
+const defaultStore: Store = Object.freeze({
+  getState: notInAContext,
+  replaceState: notInAContext,
+  subscribeToTransactions: notInAContext,
+  addTransactionMetadata: notInAContext,
+  fireNodeSubscriptions: notInAContext
+});
+declare function startNextTreeIfNeeded(storeState: StoreState): void;
+const AppContext = React.createContext<StoreRef>({
+  current: defaultStore
+});
+declare var useStoreRef: () => StoreRef;
+/*
+ * The purpose of the Batcher is to observe when React batches end so that
+ * Recoil state changes can be batched. Whenever Recoil state changes, we call
+ * setState on the batcher. Then we wait for that change to be committed, which
+ * signifies the end of the batch. That's when we respond to the Recoil change.
+ */
+
+declare function Batcher(props: {
+  setNotifyBatcherOfChange: (() => void) => void
+}): any; // if (__DEV__) {
+//   if (!window.$recoilDebugStates) {
+//     window.$recoilDebugStates = [];
+//   }
+// }
+
+declare function makeEmptyTreeState(): TreeState;
+declare function makeEmptyStoreState(): StoreState;
+declare function initialStoreState(store: any, initializeState: any): any;
+let nextID = 0;
+declare function RecoilRoot(arg0: Props): ReactElement;
+module.exports = {
+  useStoreRef,
+  RecoilRoot,
+  AppContext
+};
