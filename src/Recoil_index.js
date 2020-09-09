@@ -39,7 +39,7 @@ export type {
 } from './recoil_values/Recoil_selectorFamily';
 
 const {DefaultValue} = require('./core/Recoil_Node');
-const {RecoilRoot} = require('./core/Recoil_RecoilRoot.react');
+const {RecoilRoot, AppContext} = require('./core/Recoil_RecoilRoot.react');
 const {isRecoilValue} = require('./core/Recoil_RecoilValue');
 const {
   useGotoRecoilSnapshot,
@@ -76,6 +76,7 @@ module.exports = {
 
   // Components
   RecoilRoot,
+  AppContext,
   useRecoilBridgeAcrossReactRoots_UNSTABLE: useRecoilBridgeAcrossReactRoots,
 
   // RecoilValues
